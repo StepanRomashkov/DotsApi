@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotsApi", "DotsApi.csproj", "{38161427-A181-415C-9320-A5FB8A6C67FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38161427-A181-415C-9320-A5FB8A6C67FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38161427-A181-415C-9320-A5FB8A6C67FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38161427-A181-415C-9320-A5FB8A6C67FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38161427-A181-415C-9320-A5FB8A6C67FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4387CE3C-7FAF-40D5-967A-508111754718}
+	EndGlobalSection
+EndGlobal
