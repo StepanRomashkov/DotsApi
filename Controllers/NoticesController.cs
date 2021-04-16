@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DotsApi.Models;
 using DotsApi.Services;
+using DotsApi.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -29,11 +30,37 @@ namespace DotsApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetNotices()
         {
-            string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
 
-            IEnumerable<Notice> notices = await _noticesRepository.GetNotices(userId);
+                IEnumerable<Notice> notices = await _noticesRepository.GetNotices(userId);
 
-            return Ok(notices);
+                return Ok(notices);
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> AddNotice(AddNoticeDto model)
+        {
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+                Notice addNoticeDto = _mapper.Map<Notice>(model);
+
+                Notice notice = await _noticesRepository.AddNotice(userId, addNoticeDto);
+
+                return Ok(notice);
+            }
+            catch (AppException ex)
+            {
+
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

@@ -7,9 +7,10 @@ namespace DotsApi.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserDto>();
             CreateMap<RegisterDto, User>();
             CreateMap<UpdateDto, User>();
+
+            CreateMap<AddNoticeDto, Notice>();
         }
     }
 }

@@ -21,47 +21,32 @@ namespace DotsApi.Services
 
         public async Task<IEnumerable<Notice>> GetNotices(string userId)
         {
-            User user = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
-
-            return user.Notices;
-        }
-
-        public async Task<Notice> AddNotice(User user, Notice noticeDto)
-        {
             try
             {
-                User replacement = user;
-                Notice notice = noticeDto;
+                User user = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
 
-                notice.Id = ObjectId.GenerateNewId().ToString();
-                notice.UserId = replacement.Id;
-                notice.TimeCreated = DateTime.Now;
-                notice.IsCompleted = false;
-
-                replacement.Notices.Append(notice);
-                await _context.Users.ReplaceOneAsync(u => u.Id == user.Id, replacement);
-                return notice;
+                return user.Notices;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
 
-        public async Task<Notice> AddNotice(string userId, Notice noticeDto)
+        public async Task<Notice> AddNotice(string userId, Notice noticeDto) //needs to be refactored
         {
             try
             {
                 User replacement = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
                 Notice notice = noticeDto;
+                IEnumerable<Notice> noticesColl = replacement.Notices ?? new List<Notice>();
 
                 notice.Id = ObjectId.GenerateNewId().ToString();
                 notice.UserId = replacement.Id;
                 notice.TimeCreated = DateTime.Now;
                 notice.IsCompleted = false;
 
-                replacement.Notices.Append(notice);
+                replacement.Notices = noticesColl.Append(notice).ToArray();
                 await _context.Users.ReplaceOneAsync(u => u.Id == userId, replacement);
                 return notice;
             }

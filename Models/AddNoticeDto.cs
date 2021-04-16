@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DotsApi.Models
 {
-    public class NoticeDto
+    public class AddNoticeDto
     {
         [Required]
         public string Name { get; set; }
