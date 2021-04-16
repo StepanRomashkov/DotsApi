@@ -31,7 +31,7 @@ If you don't want to change anything and finish the setup as soon as possible, s
 This should start an instance of mongo server writing logs to "C:\mongoDatabases\DotsDb.log" so you can connect to it with Robo 3T. Change the config file at your conveinience, just make sure that the folder specified in dbPath section exists or the magic won't work.
 
 Let's connect to our db server with Robo 3T! I didn't do anything related to database security since it's running locally. Due to that all we need to specify in the connection settings is a name of the connection. If you connected successfully right click on the connection and choose "Open Shell" then type and execute `load('C://mongoDatabases//createDb.js')` command. Later on I suggest to have a little chain of commands like:
-```
+```javascript
 db.Users.drop();
 load('C://mongoDatabases//createDb.js');
 db.getCollection('Users').find({})
@@ -48,11 +48,11 @@ If it's the first time you run httprepl you need to specify a text editor for pa
 Now, connected to the base address of https://localhost:44329/ you can navigate to the 'users' controller with `cd users` and finally test *authenticate* method by typing `post authenticate` 
 
 The text editor should open. Mine usually asks me whether I want to create a new file with non-human readable name. Pass the object: 
-```
+```json
 {"email": "let@me.in", "password": "test"}
 ```
 Save file. Cose the text editor. If everything has been done correctly you should get something like that:
-```
+```powershell
 (Disconnected)> connect https://localhost:44329
 Using a base address of https://localhost:44329/
 Unable to find an OpenAPI description
@@ -78,7 +78,7 @@ X-Powered-By: ASP.NET
 Since only methods *register* and *authenticate* don't require authenticated user we need to set Authorization header for further testing. In httprepl we can do it executing the following command: `set header Authorization "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDZkZjgyMGQ0MGM4ZmFlYTc2N2UyY2YiLCJuYmYiOjE2MTc5MzMwNTAsImV4cCI6MTYxODAxOTQ0OSwiaWF0IjoxNjE3OTMzMDUwfQ.WiqMKyCKhxzlN4ItvVFjRMZcaO0v_cyme26AYGapF1U"`
 
 Then you can navigate to the notices controller with `cd /notices` and then send the command `get` which returns an array of notice objects belonging to the user currently authenticated in the system:
-```
+```powershell
 https://localhost:44329/users> set header Authorization "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDZkZjgyMGQ0MGM4ZmFlYTc2N2UyY2YiLCJuYmYiOjE2MTc5MzMwNTAsImV4cCI6MTYxODAxOTQ0OSwiaWF0IjoxNjE3OTMzMDUwfQ.WiqMKyCKhxzlN4ItvVFjRMZcaO0v_cyme26AYGapF1U"
 
 https://localhost:44329/users> cd /notices
@@ -115,8 +115,9 @@ X-Powered-By: ASP.NET
 
 So far the app has minimalistic design so the User model has only Id, Email and a collection of notices. Of course, it has a hashed password as well but thanks to Automapper it's usually not exposed. The following endpoints are currently available:
 
-- /users/register [POST] - allows user to be registered. Takes {"email": "*string*", "password": "*string*"} object as an argument
-- /users/authenticate [POST] - authenticates user. Takes {"email": "*string*", "password": "*string*"} object as an argument. Returns an object containing serialized JWT.
-- /users/{id} [PUT] - allows user to change their data. Authentication is required. Takes an object with the new data as a parameter, e.g. {"email": "newEmail"}. Should pass resource-based authorization check so users are allowed to change only their own data, not anybody else's.
-- /users/{id} [DELETE] - delete a user. Authentication is required. Due to a resource-based authorization check users are allowed to delete only themselves.
-- /notices [GET] - returns all incompleted notices that belong to currently authenticated user.
+- /users/register [POST] - Allows user to be registered. Takes {"email": "*string*", "password": "*string*"} object as an argument
+- /users/authenticate [POST] - Authenticates user. Takes {"email": "*string*", "password": "*string*"} object as an argument. Returns an object containing serialized JWT.
+- /users/{id} [PUT] - Allows user to change their data. Authentication is required. Takes an object with the new data as a parameter, e.g. {"email": "newEmail"}. Should pass resource-based authorization check so users are allowed to change only their own data, not anybody else's.
+- /users/{id} [DELETE] - Deletes a user. Authentication is required. Due to a resource-based authorization check users are allowed to delete only themselves.
+- /notices [GET] - Returns all incompleted notices that belong to currently authenticated user.
+- /notices/add [POST] - Creates a new notice for the current user. Takes a notice DTO object, e.g. {"name": "Feed the cat", "timeCompleted": "2021-04-16T18:00:00.899Z"}
