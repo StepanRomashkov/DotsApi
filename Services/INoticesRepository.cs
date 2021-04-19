@@ -6,7 +6,8 @@ namespace DotsApi.Services
 {
     public interface INoticesRepository
     {
-        Task<IEnumerable<Notice>> GetNotices(string userId);
-        Task<Notice> AddNotice(string userId, Notice noticeDto);
+        Task<IEnumerable<Notice>> GetNoticesAsync(string userId);
+        Task<Notice> AddNoticeAsync(string userId, Notice noticeDto);
+        Task DeleteNoticeAsync(string userId, string id);
     }
 }

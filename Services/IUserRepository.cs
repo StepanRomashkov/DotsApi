@@ -7,9 +7,9 @@ namespace DotsApi.Services
     {
         Task<User> GetUserById(string id);
         Task<User> GetUserByEmail(string email);
-        Task<User> CreateUser(User user, string password);
-        Task<User> Authenticate(string email, string password);
-        Task UpdateUser(User userParam, string password = null);
-        Task DeleteUser(string id);
+        Task<User> CreateUserAsync(User user, string password);
+        Task<User> AuthenticateAsync(string email, string password);
+        Task UpdateUserAsync(User userParam, string password = null);
+        Task DeleteUserAsync(string id);
     }
 }

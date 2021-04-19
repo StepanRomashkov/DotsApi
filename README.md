@@ -121,3 +121,4 @@ So far the app has minimalistic design so the User model has only Id, Email and 
 - /users/{id} [DELETE] - Deletes a user. Authentication is required. Due to a resource-based authorization check users are allowed to delete only themselves.
 - /notices [GET] - Returns all incompleted notices that belong to currently authenticated user.
 - /notices/add [POST] - Creates a new notice for the current user. Takes a notice DTO object, e.g. {"name": "Feed the cat", "timeCompleted": "2021-04-16T18:00:00.899Z"}
+- /notices/{id} [DELETE] - Deletes a specified notice from the current user.

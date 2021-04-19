@@ -19,7 +19,7 @@ namespace DotsApi.Services
             _context = new DotsDatabaseContext(settings);
         }
 
-        public async Task<IEnumerable<Notice>> GetNotices(string userId)
+        public async Task<IEnumerable<Notice>> GetNoticesAsync(string userId)
         {
             try
             {
@@ -33,28 +33,38 @@ namespace DotsApi.Services
             }
         }
 
-        public async Task<Notice> AddNotice(string userId, Notice noticeDto) //needs to be refactored
+        public async Task<Notice> AddNoticeAsync(string userId, Notice noticeDto)
         {
             try
             {
-                User replacement = await _context.Users.Find(u => u.Id == userId).FirstOrDefaultAsync();
+                FilterDefinition<User> filter = Builders<User>.Filter.Eq(u => u.Id, userId);
                 Notice notice = noticeDto;
-                IEnumerable<Notice> noticesColl = replacement.Notices ?? new List<Notice>();
 
                 notice.Id = ObjectId.GenerateNewId().ToString();
-                notice.UserId = replacement.Id;
+                notice.UserId = userId;
                 notice.TimeCreated = DateTime.Now;
                 notice.IsCompleted = false;
 
-                replacement.Notices = noticesColl.Append(notice).ToArray();
-                await _context.Users.ReplaceOneAsync(u => u.Id == userId, replacement);
+                UpdateDefinition<User> updateAddNotice = Builders<User>
+                    .Update.Push<Notice>(u => u.Notices, notice);
+
+                await _context.Users.UpdateOneAsync(filter, updateAddNotice);
+
                 return notice;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+        }
+
+        public async Task DeleteNoticeAsync(string userId, string id)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            UpdateDefinition<User> updateDeleteNotice = Builders<User>
+                .Update.PullFilter(u => u.Notices, n => n.Id == id);
+
+            await _context.Users.UpdateOneAsync(filter, updateDeleteNotice);
         }
     }
 }

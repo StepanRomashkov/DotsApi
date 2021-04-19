@@ -40,7 +40,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
-        public async Task<User> CreateUser(User user, string password)
+        public async Task<User> CreateUserAsync(User user, string password)
         {
             if (GetUserByEmail(user.Email).Result != null)
                 throw new AppException($"The email {user.Email} is already exist");
@@ -60,7 +60,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
-        public async Task<User> Authenticate(string email, string password)
+        public async Task<User> AuthenticateAsync(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
@@ -83,7 +83,7 @@ namespace DotsApi.Services
             }
         }
 
-        public async Task UpdateUser(User user, string password = null)
+        public async Task UpdateUserAsync(User user, string password = null)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace DotsApi.Services
             }
         }
 
-        public async Task DeleteUser(string id)
+        public async Task DeleteUserAsync(string id)
         {
             try
             {

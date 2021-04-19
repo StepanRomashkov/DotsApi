@@ -28,13 +28,13 @@ namespace DotsApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetNotices()
+        public async Task<IActionResult> GetNoticesAsync()
         {
             try
             {
                 string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
 
-                IEnumerable<Notice> notices = await _noticesRepository.GetNotices(userId);
+                IEnumerable<Notice> notices = await _noticesRepository.GetNoticesAsync(userId);
 
                 return Ok(notices);
             }
@@ -45,16 +45,34 @@ namespace DotsApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddNotice(AddNoticeDto model)
+        public async Task<IActionResult> AddNoticeAsync(AddNoticeDto model)
         {
             try
             {
                 string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
                 Notice addNoticeDto = _mapper.Map<Notice>(model);
 
-                Notice notice = await _noticesRepository.AddNotice(userId, addNoticeDto);
+                Notice notice = await _noticesRepository.AddNoticeAsync(userId, addNoticeDto);
 
                 return Ok(notice);
+            }
+            catch (AppException ex)
+            {
+
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNoticeAsync(string id)
+        {
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+                
+                await _noticesRepository.DeleteNoticeAsync(userId, id);
+
+                return Ok();
             }
             catch (AppException ex)
             {

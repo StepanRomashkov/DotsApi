@@ -34,9 +34,9 @@ namespace DotsApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate(AuthenticateDto model)
+        public async Task<IActionResult> AuthenticateAsync(AuthenticateDto model)
         {
-            var user = await _userRepository.Authenticate(model.Email, model.Password);
+            var user = await _userRepository.AuthenticateAsync(model.Email, model.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Email or password is incorrect" });
@@ -59,12 +59,12 @@ namespace DotsApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto model)
+        public async Task<IActionResult> RegisterAsync(RegisterDto model)
         {
             var user = _mapper.Map<User>(model);
             try
             {
-                await _userRepository.CreateUser(user, model.Password);
+                await _userRepository.CreateUserAsync(user, model.Password);
                 return Ok();
             }
             catch (AppException ex)
@@ -74,7 +74,7 @@ namespace DotsApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, UpdateDto model)
+        public async Task<IActionResult> UpdateUserAsync(string id, UpdateDto model)
         {
             var user = _mapper.Map<User>(model);
             user.Id = id;
@@ -87,7 +87,7 @@ namespace DotsApi.Controllers
                 if (!isAuthorized.Succeeded)
                     return Forbid();
 
-                await _userRepository.UpdateUser(user, model.Password);
+                await _userRepository.UpdateUserAsync(user, model.Password);
 
                 return Ok();
             }
@@ -98,7 +98,7 @@ namespace DotsApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<IActionResult> DeleteUserAsync(string id)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace DotsApi.Controllers
                 if (!isAuthorized.Succeeded)
                     return Forbid();
 
-                await _userRepository.DeleteUser(id);
+                await _userRepository.DeleteUserAsync(id);
 
                 return Ok();
             }
