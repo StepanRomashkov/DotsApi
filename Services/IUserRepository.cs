@@ -5,8 +5,8 @@ namespace DotsApi.Services
 {
     public interface IUserRepository
     {
-        Task<User> GetUserById(string id);
-        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByIdAsync(string id);
+        Task<User> GetUserByEmailAsync(string email);
         Task<User> CreateUserAsync(User user, string password);
         Task<User> AuthenticateAsync(string email, string password);
         Task UpdateUserAsync(User userParam, string password = null);

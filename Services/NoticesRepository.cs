@@ -58,6 +58,36 @@ namespace DotsApi.Services
             }
         }
 
+        public async Task UpdateNoticeAsync(Notice updateNoticeDto)
+        {
+            List<UpdateDefinition<User>> updateList = new List<UpdateDefinition<User>>();
+            FilterDefinition<User> filter = Builders<User>.Filter.Eq(u => u.Id, updateNoticeDto.UserId);
+            User user = await _context.Users.Find(filter).FirstOrDefaultAsync();
+            Notice notice = user.Notices.Where(n => n.Id == updateNoticeDto.Id).FirstOrDefault();
+
+            FilterDefinition<User> filterNotice = Builders<User>.Filter
+                .And(filter, Builders<User>.Filter.ElemMatch(n => n.Notices, n => n.Id == updateNoticeDto.Id));
+
+            if (!string.IsNullOrWhiteSpace(updateNoticeDto.Name) && notice.Name != updateNoticeDto.Name)
+            {
+                UpdateDefinition<User> updateName = Builders<User>.Update
+                    .Set(u => u.Notices.ElementAt(-1).Name, updateNoticeDto.Name);
+                updateList.Add(updateName);
+            }
+
+            if (updateNoticeDto.TimeCompleted != DateTime.MinValue 
+                && notice.TimeCompleted != updateNoticeDto.TimeCompleted)
+            {
+                UpdateDefinition<User> updateTime = Builders<User>.Update
+                    .Set(u => u.Notices.ElementAt(-1).TimeCompleted, updateNoticeDto.TimeCompleted);
+                updateList.Add(updateTime);
+            }
+
+            UpdateDefinition<User> updateFinal = Builders<User>.Update.Combine(updateList);
+
+            await _context.Users.UpdateOneAsync(filterNotice, updateFinal);
+        }
+
         public async Task DeleteNoticeAsync(string userId, string id)
         {
             FilterDefinition<User> filter = Builders<User>.Filter.Eq(u => u.Id, userId);

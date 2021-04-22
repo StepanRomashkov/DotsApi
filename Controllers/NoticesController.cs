@@ -63,6 +63,27 @@ namespace DotsApi.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateNoticeAsync(string id, UpdateNoticeDto model)
+        {
+            try
+            {
+                string userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+                Notice notice = _mapper.Map<Notice>(model);
+                notice.Id = id;
+                notice.UserId = userId;
+
+                await _noticesRepository.UpdateNoticeAsync(notice);
+
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNoticeAsync(string id)
         {

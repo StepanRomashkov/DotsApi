@@ -11,6 +11,7 @@ namespace DotsApi.Helpers
             CreateMap<UpdateDto, User>();
 
             CreateMap<AddNoticeDto, Notice>();
+            CreateMap<UpdateNoticeDto, Notice>();
         }
     }
 }

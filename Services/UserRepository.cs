@@ -16,7 +16,7 @@ namespace DotsApi.Services
         {
             _context = new DotsDatabaseContext(settings);
         }
-        public async Task<User> GetUserById(string id)
+        public async Task<User> GetUserByIdAsync(string id)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
-        public async Task<User> GetUserByEmail(string email)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
             try
             {
@@ -42,13 +42,12 @@ namespace DotsApi.Services
         }
         public async Task<User> CreateUserAsync(User user, string password)
         {
-            if (GetUserByEmail(user.Email).Result != null)
+            if (GetUserByEmailAsync(user.Email).Result != null)
                 throw new AppException($"The email {user.Email} is already exist");
 
             try
             {
                 user.Id = ObjectId.GenerateNewId().ToString();
-
                 user.PasswordHash = CreatePasswordHash(password);
 
                 await _context.Users.InsertOneAsync(user);
@@ -67,7 +66,7 @@ namespace DotsApi.Services
             
             try
             {
-                User user = await GetUserByEmail(email);
+                User user = await GetUserByEmailAsync(email);
                 
                 if (user == null)
                     return null;
@@ -87,14 +86,14 @@ namespace DotsApi.Services
         {
             try
             {
-                User replacement = await GetUserById(user.Id);                
+                User replacement = await GetUserByIdAsync(user.Id);                
                 
                 if (replacement == null)
                     throw new AppException("User not found");
                 
                 if (!string.IsNullOrWhiteSpace(user.Email) && user.Email != replacement.Email)
                 {
-                    if (GetUserByEmail(user.Email).Result != null)
+                    if (GetUserByEmailAsync(user.Email).Result != null)
                         throw new AppException($"The email {user.Email} is already taken");
                     
                     replacement.Email = user.Email;

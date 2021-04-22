@@ -8,6 +8,7 @@ namespace DotsApi.Services
     {
         Task<IEnumerable<Notice>> GetNoticesAsync(string userId);
         Task<Notice> AddNoticeAsync(string userId, Notice noticeDto);
+        Task UpdateNoticeAsync(Notice noticeDto);
         Task DeleteNoticeAsync(string userId, string id);
     }
 }
