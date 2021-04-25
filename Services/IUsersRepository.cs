@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DotsApi.Services
 {
-    public interface IUserRepository
+    public interface IUsersRepository
     {
         Task<User> GetUserByIdAsync(string id);
         Task<User> GetUserByEmailAsync(string email);

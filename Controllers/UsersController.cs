@@ -14,13 +14,13 @@ namespace DotsApi.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserRepository _userRepository;
+        private IUsersRepository _userRepository;
         private IMapper _mapper;
         private IDotsSecurityTokenHandler _dotsSecurityTokenHandler;
         private IAuthorizationService AuthorizationService { get; }
 
         public UsersController(
-            IUserRepository userRepository, 
+            IUsersRepository userRepository, 
             IMapper mapper,
             IDotsSecurityTokenHandler dotsSecurityTokenHandler,
             IAuthorizationService authorizationService)

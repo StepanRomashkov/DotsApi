@@ -14,6 +14,11 @@ namespace DotsApi.Models
                 _database = client.GetDatabase(settings.Value.Database);
         }
 
+        public DotsDatabaseContext(MongoClient client, string databaseName)
+        {
+            _database = client.GetDatabase(databaseName);
+        }
+
         public IMongoCollection<User> Users
         {
             get

@@ -53,38 +53,6 @@ namespace DotsApi
                     };
                 });
 
-            /*            services.AddAuthentication(x =>
-                        {
-                            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                        })
-                            .AddJwtBearer(x =>
-                            {
-                                x.Events = new JwtBearerEvents
-                                {
-                                    OnTokenValidated = context =>
-                                    {
-                                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
-                                        var userId = context.Principal.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
-                                        var user = userService.GetUserById(userId);
-                                        if (user == null)
-                                        {
-                                            context.Fail("Unauthorized");
-                                        }
-                                        return Task.CompletedTask;
-                                    }
-                                };
-                                x.RequireHttpsMetadata = false;
-                                x.SaveToken = true;
-                                x.TokenValidationParameters = new TokenValidationParameters
-                                {
-                                    ValidateIssuerSigningKey = true,
-                                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                                    ValidateIssuer = false,
-                                    ValidateAudience = false
-                                };
-                            });*/
-
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -99,7 +67,7 @@ namespace DotsApi
                 }
             );
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<INoticesRepository, NoticesRepository>();
             services.AddScoped<IDotsSecurityTokenHandler, DotsSecurityTokenHandler>();
             services.AddScoped<IAuthorizationHandler, UserUDSelfAuthorizationHandler>();

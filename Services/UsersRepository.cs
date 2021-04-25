@@ -8,14 +8,20 @@ using System.Threading.Tasks;
 
 namespace DotsApi.Services
 {
-    public class UserRepository: IUserRepository
+    public class UsersRepository: IUsersRepository
     {
         private readonly DotsDatabaseContext _context = null;
 
-        public UserRepository(IOptions<DotsDatabaseSettings> settings)
+        public UsersRepository(IOptions<DotsDatabaseSettings> settings)
         {
             _context = new DotsDatabaseContext(settings);
         }
+
+        public UsersRepository(DotsDatabaseContext context)
+        {
+            _context = context;
+        }
+
         public async Task<User> GetUserByIdAsync(string id)
         {
             try
@@ -28,6 +34,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
             try
@@ -40,6 +47,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
+
         public async Task<User> CreateUserAsync(User user, string password)
         {
             if (GetUserByEmailAsync(user.Email).Result != null)
@@ -49,6 +57,7 @@ namespace DotsApi.Services
             {
                 user.Id = ObjectId.GenerateNewId().ToString();
                 user.PasswordHash = CreatePasswordHash(password);
+                user.Notices = new Notice[] { };
 
                 await _context.Users.InsertOneAsync(user);
 
@@ -59,6 +68,7 @@ namespace DotsApi.Services
                 throw ex;
             }
         }
+
         public async Task<User> AuthenticateAsync(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))

@@ -19,6 +19,10 @@ namespace DotsApi.Services
             _context = new DotsDatabaseContext(settings);
         }
 
+        public NoticesRepository(DotsDatabaseContext context)
+        {
+            _context = context;
+        }
         public async Task<IEnumerable<Notice>> GetNoticesAsync(string userId)
         {
             try
@@ -72,6 +76,7 @@ namespace DotsApi.Services
             {
                 UpdateDefinition<User> updateName = Builders<User>.Update
                     .Set(u => u.Notices.ElementAt(-1).Name, updateNoticeDto.Name);
+                
                 updateList.Add(updateName);
             }
 
@@ -80,17 +85,20 @@ namespace DotsApi.Services
             {
                 UpdateDefinition<User> updateTime = Builders<User>.Update
                     .Set(u => u.Notices.ElementAt(-1).TimeCompleted, updateNoticeDto.TimeCompleted);
+                
                 updateList.Add(updateTime);
             }
 
             UpdateDefinition<User> updateFinal = Builders<User>.Update.Combine(updateList);
 
-            await _context.Users.UpdateOneAsync(filterNotice, updateFinal);
+            if(updateList.Count != 0)
+                await _context.Users.UpdateOneAsync(filterNotice, updateFinal);
         }
 
         public async Task DeleteNoticeAsync(string userId, string id)
         {
             FilterDefinition<User> filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            
             UpdateDefinition<User> updateDeleteNotice = Builders<User>
                 .Update.PullFilter(u => u.Notices, n => n.Id == id);
 
