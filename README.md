@@ -113,7 +113,7 @@ X-Powered-By: ASP.NET
 
 ## Endpoints
 
-So far the app has minimalistic design so the User model has only Id, Email and a collection of notices. Of course, it has a hashed password as well but thanks to Automapper it's usually not exposed. The following endpoints are currently available:
+So far the app has minimalistic design. For example the User model has only Id, Email, hashed password and a collection of notices. The following endpoints are currently available:
 
 - /users/register [POST] - Allows user to be registered. Takes {"email": "*string*", "password": "*string*"} object as an argument
 - /users/authenticate [POST] - Authenticates user. Takes {"email": "*string*", "password": "*string*"} object as an argument. Returns an object containing serialized JWT.
