@@ -28,6 +28,7 @@ namespace DotsTests
             testSubject.Id = "60848ae8fb71edf2a7ebf846";
             testSubject.Email = "test@subject.zero";
             testSubject.PasswordHash = "$2a$11$wvypXckqs4LxCCalZMBV9.CIkcUmayQAvvyISAPmlY4/Prs49Wkce";
+            testSubject.Notices = new Notice[] { };
             Notice notice = new Notice()
             {
                 Id = "608235aea059ac5c9af6da20",
@@ -37,7 +38,7 @@ namespace DotsTests
                 TimeCompleted = DateTime.UtcNow.AddDays(3),
                 IsCompleted = false
             };
-            testSubject.Notices = new Notice[] { notice };
+            testSubject.Notices = testSubject.Notices.Append(notice);
 
             if (_usersCollection.Find(u => u.Email == testSubject.Email).FirstOrDefault() == null)
                 _usersCollection.InsertOne(testSubject);

@@ -16,17 +16,17 @@ namespace DotsTests
 
         public static DotsDatabaseContext databaseContext = new DotsDatabaseContext(client, GetMongoDbDatabase());
 
-        private static string GetSecret()
+        public static string GetSecret()
         {
             return _configuration.GetSection("AppSettings:Secret").Value;
         }
 
-        private static string GetMongoDbConnectionString()
+        public static string GetMongoDbConnectionString()
         {
             return _configuration.GetSection("MongoConnection:ConnectionString").Value;
         }
 
-        private static string GetMongoDbDatabase()
+        public static string GetMongoDbDatabase()
         {
             //return _configuration.GetSection("MongoConnection:Database").Value;
             return "TestDotsDb";

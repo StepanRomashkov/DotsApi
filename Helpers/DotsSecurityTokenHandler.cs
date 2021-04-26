@@ -24,6 +24,13 @@ namespace DotsApi.Helpers
             _expires = DateTime.UtcNow.AddDays(1);
         }
 
+        public DotsSecurityTokenHandler(
+            SymmetricSecurityKey key
+            , SigningCredentials signingCredentials
+            , JwtSecurityTokenHandler tokenHandler
+            , DateTime expires)
+            { _key = key; _signingCredentials = signingCredentials; _tokenHandler = tokenHandler; _expires = expires; }
+
         public string CreateToken(User user)
         {
             IEnumerable<Claim> claims = new List<Claim> 
