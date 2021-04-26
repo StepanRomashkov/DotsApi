@@ -104,8 +104,8 @@ namespace DotsTests
 
                 OkObjectResult result = await _usersController.AuthenticateAsync(dto) as OkObjectResult;
                 BsonDocument elements = result.Value.ToBsonDocument();
-                Assert.AreEqual(elements.GetValue("_id").ToString(), "60848ae8fb71edf2a7ebf846");
-                Assert.AreEqual(elements.GetValue("Email").ToString(), dto.Email);
+                Assert.AreEqual("60848ae8fb71edf2a7ebf846", elements.GetValue("_id").ToString());
+                Assert.AreEqual(dto.Email, elements.GetValue("Email").ToString());
                 Assert.NotNull(elements.GetValue("Token"));
 
                 dto.Email = "nonExistentEmail";

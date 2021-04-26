@@ -53,7 +53,7 @@ namespace DotsTests
                 IEnumerable<Notice> notices = await _noticesRepository.GetNoticesAsync("60848ae8fb71edf2a7ebf846");
 
                 Assert.NotNull(notices);
-                Assert.AreEqual(notices.Count(), 1);
+                Assert.AreEqual(1, notices.Count());
             }
             catch (Exception ex)
             {
@@ -82,7 +82,7 @@ namespace DotsTests
 
                 IEnumerable<Notice> notices = await _noticesRepository.GetNoticesAsync("60848ae8fb71edf2a7ebf846");
 
-                Assert.AreEqual(notices.Count(), 2);
+                Assert.AreEqual(2, notices.Count());
             }
             catch (Exception ex)
             {
@@ -113,7 +113,7 @@ namespace DotsTests
                 notice.Name = "Name Changed";
                 await _noticesRepository.UpdateNoticeAsync(notice);
                 notice = getNotice(UserId, NoticeId);
-                Assert.AreEqual(notice.Name, "Name Changed");
+                Assert.AreEqual("Name Changed", notice.Name);
 
                 DateTime oldTime = notice.TimeCompleted;
                 notice.TimeCompleted = notice.TimeCompleted.AddMinutes(30);
@@ -125,8 +125,8 @@ namespace DotsTests
                 notice.TimeCompleted = oldTime;
                 await _noticesRepository.UpdateNoticeAsync(notice);
                 notice = getNotice(UserId, NoticeId);
-                Assert.AreEqual(notice.Name, "changed again");
-                Assert.AreEqual(notice.TimeCompleted, oldTime);
+                Assert.AreEqual("changed again", notice.Name);
+                Assert.AreEqual(oldTime, notice.TimeCompleted);
             }
             catch (Exception ex)
             {
@@ -145,7 +145,7 @@ namespace DotsTests
             try
             {
                 User user = await _usersCollection.Find(u => u.Id == "60848ae8fb71edf2a7ebf846").FirstOrDefaultAsync();
-                Assert.AreEqual(user.Notices.Count(), 1);
+                Assert.AreEqual(1, user.Notices.Count());
 
                 await _noticesRepository.DeleteNoticeAsync(user.Id, "608235aea059ac5c9af6da20");
                 user = await _usersCollection.Find(u => u.Id == "60848ae8fb71edf2a7ebf846").FirstOrDefaultAsync();

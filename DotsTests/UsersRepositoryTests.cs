@@ -35,7 +35,7 @@ namespace DotsTests
             User user = await _usersRepository.GetUserByIdAsync("60848ae8fb71edf2a7ebf846");
 
             Assert.IsNotNull(user);
-            Assert.AreEqual(user.Email, "test@subject.zero");
+            Assert.AreEqual("test@subject.zero", user.Email);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace DotsTests
             User user = await _usersRepository.GetUserByEmailAsync("test@subject.zero");
 
             Assert.IsNotNull(user);
-            Assert.AreEqual(user.Id, "60848ae8fb71edf2a7ebf846");
+            Assert.AreEqual("60848ae8fb71edf2a7ebf846", user.Id);
         }
 
         [Test]
@@ -98,8 +98,8 @@ namespace DotsTests
                 User result = await _usersRepository.AuthenticateAsync(email, password);
 
                 Assert.IsNotNull(result);
-                Assert.AreEqual(result.Id, "60848ae8fb71edf2a7ebf846");
-                Assert.AreEqual(result.Email, email);
+                Assert.AreEqual("60848ae8fb71edf2a7ebf846", result.Id);
+                Assert.AreEqual(email, result.Email);
                 Assert.True(BCrypt.Net.BCrypt.Verify(password, result.PasswordHash));
             }
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace DotsTests
                 await _usersRepository.UpdateUserAsync(replacement);
                 User updatedUser = await _usersCollection.Find(u => u.Email == "newEmail").FirstOrDefaultAsync();
                 Assert.NotNull(updatedUser);
-                Assert.AreEqual(updatedUser.Id, replacement.Id);
+                Assert.AreEqual(replacement.Id, updatedUser.Id);
 
                 await _usersRepository.UpdateUserAsync(updatedUser, "newPassword");
                 updatedUser = await _usersCollection.Find(u => u.Id == "60848ae8fb71edf2a7ebf846").FirstOrDefaultAsync();
@@ -148,7 +148,7 @@ namespace DotsTests
 
                 await _usersRepository.UpdateUserAsync(replacement, "oldPassword");
                 updatedUser = await _usersCollection.Find(u => u.Id == "60848ae8fb71edf2a7ebf846").FirstOrDefaultAsync();
-                Assert.AreEqual(updatedUser.Email, "test@subject.zero");
+                Assert.AreEqual("test@subject.zero", updatedUser.Email);
                 Assert.True(BCrypt.Net.BCrypt.Verify("oldPassword", updatedUser.PasswordHash));
             }
             catch (Exception ex)
